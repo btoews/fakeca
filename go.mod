@@ -1,3 +1,3 @@
-module github.com/github/fakeca
+module github.com/btoews/fakeca
 
 go 1.12
