@@ -9,12 +9,15 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"net"
 	"time"
 )
 
 type configuration struct {
 	subject               *pkix.Name
 	dnsNames              []string
+	ipAddresses           []net.IP
+	emailAddresses        []string
 	issuer                *Identity
 	nextSN                *int64
 	priv                  *crypto.Signer
@@ -37,6 +40,8 @@ func (c *configuration) generate() *Identity {
 		OCSPServer:            c.ocspServer,
 		KeyUsage:              c.keyUsage,
 		DNSNames:              c.dnsNames,
+		IPAddresses:           c.ipAddresses,
+		EmailAddresses:        c.emailAddresses,
 	}
 
 	var (
@@ -181,6 +186,18 @@ func Subject(value pkix.Name) Option {
 func DNSNames(names ...string) Option {
 	return func(c *configuration) {
 		c.dnsNames = names
+	}
+}
+
+func IPAddresses(ips ...net.IP) Option {
+	return func(c *configuration) {
+		c.ipAddresses = ips
+	}
+}
+
+func EmailAddresses(emails ...string) Option {
+	return func(c *configuration) {
+		c.emailAddresses = emails
 	}
 }
 
