@@ -14,6 +14,7 @@ import (
 
 type configuration struct {
 	subject               *pkix.Name
+	dnsNames              []string
 	issuer                *Identity
 	nextSN                *int64
 	priv                  *crypto.Signer
@@ -35,6 +36,7 @@ func (c *configuration) generate() *Identity {
 		IssuingCertificateURL: c.issuingCertificateURL,
 		OCSPServer:            c.ocspServer,
 		KeyUsage:              c.keyUsage,
+		DNSNames:              c.dnsNames,
 	}
 
 	var (
@@ -173,6 +175,12 @@ type option func(c *configuration)
 func Subject(value pkix.Name) Option {
 	return func(c *configuration) {
 		c.subject = &value
+	}
+}
+
+func DNSNames(names ...string) Option {
+	return func(c *configuration) {
+		c.dnsNames = names
 	}
 }
 
